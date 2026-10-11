@@ -1,0 +1,42 @@
+# Render Blueprint for the backend API. Frontend: deploy frontend/ on Vercel.
+# Secrets are marked `sync: false` - enter them in the Render dashboard, never in this file.
+services:
+  - type: web
+    name: hadith-finder-api
+    runtime: docker
+    rootDir: backend
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: ENABLE_DEBUG
+        value: "false"
+      - key: STORAGE_BACKEND
+        value: supabase  # Render's disk is ephemeral: page images must live in Supabase Storage
+      - key: STORAGE_BUCKET
+        value: books
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: anthropic
+      - key: LLM_MODEL
+        value: claude-opus-5
+      - key: LLM_API_KEY
+        sync: false
+      - key: EMBEDDING_PROVIDER
+        sync: false
+      - key: EMBEDDING_API_KEY
+        sync: false
+      - key: EMBEDDING_DIM
+        value: "1024"
+      - key: RERANKER_PROVIDER
+        value: llm
+      - key: CORS_ORIGINS
+        sync: false  # e.g. https://your-app.vercel.app
+      - key: REDIS_URL
+        sync: false

@@ -1,0 +1,29 @@
+{"id": "q01", "question": "লুকমান (আঃ) তাঁর ছেলেকে কী কী উপদেশ দিয়েছিলেন?", "expected": [{"pdf_page": 11, "printed_page": 14, "snippet": "হে বৎস"}], "tags": ["quran", "advice"]}
+{"id": "q02", "question": "শীতকালে গাছের পাতা ঝরে পড়ার উদাহরণ দিয়ে নামাযের ব্যাপারে কী বলা হয়েছে?", "expected": [{"pdf_page": 62, "printed_page": 65, "snippet": "গাছের পাতা"}], "tags": ["namaz", "hadith"]}
+{"id": "q03", "question": "যারা নামাজে অবহেলা করে তাদের হাশর কাদের সাথে হবে?", "expected": [{"pdf_page": 100, "printed_page": 103, "snippet": "উবাই ইবনে খলফ"}], "tags": ["namaz", "warning"]}
+{"id": "q04", "question": "হযরত আতা যে বাঁদী কিনেছিলেন, রাতে তার নামাজের অবস্থা কেমন ছিল?", "expected": [{"pdf_page": 150, "printed_page": 153, "snippet": "সাত দীনার"}], "tags": ["namaz", "story"]}
+{"id": "q05", "question": "কুরআন শেখা ও শেখানো ব্যক্তির মর্যাদা সম্পর্কে হাদীসে কী আছে?", "expected": [{"pdf_page": 199, "printed_page": null, "snippet": "সর্বোত্তম"}], "tags": ["quran", "split-page"], "notes": "PDF 199-200 is one printed page split into two PDF pages"}
+{"id": "q06", "question": "What does the book say about the person who learns the Qur'an and teaches it?", "expected": [{"pdf_page": 199, "printed_page": null, "snippet": "সর্বোত্তম"}], "tags": ["quran", "english", "split-page"]}
+{"id": "q07", "question": "কুরআন তেলাওয়াতের সময় সাহাবী মেঘের মত কী দেখেছিলেন?", "expected": [{"pdf_page": 240, "printed_page": 243, "snippet": "মেঘের মত"}], "tags": ["quran", "angels"]}
+{"id": "q08", "question": "কিয়ামতের দিন কোন তিন ব্যক্তি ভয় পাবে না?", "expected": [{"pdf_page": 263, "printed_page": 266, "snippet": "তিন ব্যক্তি"}], "tags": ["quran", "hadith"]}
+{"id": "q09", "question": "চল্লিশ হাদীস মুখস্থ করলে জান্নাত — সে বিষয়ে হযরত সালমান ফারসী কী জিজ্ঞেস করেছিলেন?", "expected": [{"pdf_page": 300, "printed_page": 303, "snippet": "চল্লিশ"}], "tags": ["hadith", "iman"]}
+{"id": "q10", "question": "অত্যাচারী বাদশাহর শরাবের মটকা ভাঙার ঘটনাটি কী?", "expected": [{"pdf_page": 350, "printed_page": 355, "snippet": "মটকা"}], "tags": ["ikhlas", "story"]}
+{"id": "q11", "question": "যে সত্য কথা নিয়ে এসেছে — এই আয়াতে সত্য কথা বলতে কী বোঝানো হয়েছে?", "expected": [{"pdf_page": 400, "printed_page": 405, "snippet": "লা ইলাহা ইল্লাল্লাহ"}], "tags": ["zikr", "tafsir"]}
+{"id": "q12", "question": "নবীজীর ইন্তেকালের পর হযরত ওসমান কোন চিন্তায় মগ্ন ছিলেন?", "expected": [{"pdf_page": 450, "printed_page": 455, "snippet": "নাজাত"}], "tags": ["zikr", "sahaba"]}
+{"id": "q13", "question": "আরশ বহনকারী ফেরেশতারা মুমিনদের জন্য কী দোয়া করে?", "expected": [{"pdf_page": 500, "printed_page": 505, "snippet": "আরশ বহন"}], "tags": ["zikr", "quran"]}
+{"id": "q14", "question": "ব্যবসা বা খেতের কাজ করতে করতে তাসবিহ পড়ার ব্যাপারে কী বলা হয়েছে?", "expected": [{"pdf_page": 550, "printed_page": 555, "snippet": "ক্ষেতখামারে"}], "tags": ["zikr"]}
+{"id": "q15", "question": "বুজুর্গদের ঘটনা পড়ার উপকারিতা সম্পর্কে জুনাইদ বাগদাদী কী বলেছেন?", "expected": [{"pdf_page": 601, "printed_page": 608, "snippet": "বাহিনী"}], "tags": ["hekayat", "preface"]}
+{"id": "q16", "question": "আবদুল্লাহ ইবনে রাওয়াহা (রাঃ) কাঁদছিলেন কেন?", "expected": [{"pdf_page": 650, "printed_page": 657, "snippet": "রাওয়াহা"}], "tags": ["hekayat", "fear"]}
+{"id": "q17", "question": "কোন আয়াত শুনে যুরারা ইবনে আওফা মারা গিয়েছিলেন?", "expected": [{"pdf_page": 650, "printed_page": 657, "snippet": "যুরারা"}], "tags": ["hekayat", "fear"]}
+{"id": "q18", "question": "হযরত আবু তালহা তার প্রিয় বাগান বাইরাহা নিয়ে কী করেছিলেন?", "expected": [{"pdf_page": 700, "printed_page": 707, "snippet": "বাইরাহা"}], "tags": ["hekayat", "sadaqah"]}
+{"id": "q19", "question": "ইমাম বুখারী কত হাদীস থেকে বাছাই করে বুখারী শরীফ লিখেছেন?", "expected": [{"pdf_page": 750, "printed_page": 757, "snippet": "ছয় লক্ষ"}], "tags": ["hekayat", "ilm"]}
+{"id": "q20", "question": "কাকে উম্মুল মাসাকীন বা গরিবের মা বলা হত?", "expected": [{"pdf_page": 800, "printed_page": 807, "snippet": "উম্মুল মাসাকীন"}], "tags": ["hekayat", "women"]}
+{"id": "q21", "question": "হুদায়বিয়ায় কুরাইশের দূত সাহাবীদের ভালোবাসা সম্পর্কে কী বলেছিল?", "expected": [{"pdf_page": 850, "printed_page": 857, "snippet": "বাদশাহকে দেখি নাই"}], "tags": ["hekayat", "love"]}
+{"id": "q22", "question": "জিহাদে যেতে চাওয়া সাহাবীকে মায়ের খেদমত সম্পর্কে নবীজী কী বলেছিলেন?", "expected": [{"pdf_page": 900, "printed_page": 907, "snippet": "পায়ের নীচে"}], "tags": ["ramadan", "parents"]}
+{"id": "q23", "question": "পুরুষের জন্য ইতিকাফের সবচেয়ে উত্তম জায়গা কোনটি?", "expected": [{"pdf_page": 950, "printed_page": 957, "snippet": "মসজিদে হারাম"}], "tags": ["ramadan", "itikaf"]}
+{"id": "q24", "question": "মহিলারা কোথায় ইতিকাফ করবেন?", "expected": [{"pdf_page": 950, "printed_page": 957, "snippet": "মহিলাগণ"}], "tags": ["ramadan", "itikaf"]}
+{"id": "q25", "question": "মানুষ অন্যায় কাজ দেখে বাধা না দিলে কী হবে বলে হাদীসে এসেছে?", "expected": [{"pdf_page": 990, "printed_page": 997, "snippet": "আজাবে"}], "tags": ["tabligh", "hadith"]}
+{"id": "q26", "question": "পিতামাতার নাফরমানির শাস্তি সম্পর্কে কী বলা হয়েছে?", "expected": [{"pdf_page": 900, "printed_page": 907, "snippet": "মৃত্যুর"}], "tags": ["ramadan", "parents"]}
+{"id": "n01", "question": "বাংলাদেশের রাজধানীর নাম কী?", "expected": [], "expect_insufficient": true, "tags": ["negative"]}
+{"id": "n02", "question": "বিটকয়েনে বিনিয়োগ করা কি হালাল?", "expected": [], "expect_insufficient": true, "tags": ["negative"]}
+{"id": "n03", "question": "What is the best programming language for web development?", "expected": [], "expect_insufficient": true, "tags": ["negative", "english"]}

@@ -1,0 +1,12 @@
+# Book configuration for the ingestion pipeline.
+# Add another book by creating a sibling folder with its own book.yaml.
+slug: fazail-e-amal
+title: Fazail-e-Amal
+title_native: ফাযায়েলে আমল
+author: Shaykhul Hadith Maulana Muhammad Zakariyya Kandhlawi (rah.)
+language: bn
+description: Bangla translation of Fazail-e-Amal (scanned edition, 1009 pages).
+pdf: sources/fazail-e-amal.pdf  # relative to the project root
+
+ocr_width_px: 2400
+display_width_px: 1600

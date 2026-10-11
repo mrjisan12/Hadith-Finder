@@ -1,0 +1,727 @@
+# Project: Hadith Source-Grounded AI RAG Chatbot
+
+I want you to build a professional, production-quality MVP of a source-grounded AI chatbot based on a scanned Hadith/Islamic book PDF.
+
+The primary goal is NOT to build a generic "chat with PDF" application.
+
+The core goal is:
+
+> When a user asks a question about a topic, the system should retrieve the most relevant passage from the original book and show the exact original paragraph/text together with the book's printed page number and the corresponding PDF page. The user should also be able to view the original scanned page to verify the source.
+
+The original PDF must remain the ultimate source of truth.
+
+---
+
+# 1. Source Document
+
+I will provide a scanned PDF of approximately 1009 pages.
+
+Example:
+
+source/fazail-e-amal.pdf
+
+The PDF may contain scanned pages rather than machine-readable text.
+
+The system must preserve:
+
+* PDF page number
+* Printed page number
+* Chapter/section where available
+* Exact paragraph
+* Paragraph order
+* Original page image
+* Source document/book ID
+
+Important:
+
+The PDF viewer page number and the printed page number may NOT be the same.
+
+For example:
+
+PDF page: 263
+Printed book page: 251
+
+The application must preserve both values.
+
+---
+
+# 2. Core Product Behavior
+
+Example user query:
+
+"সদকার ফজিলত সম্পর্কে কী বলা হয়েছে?"
+
+The system should:
+
+1. Understand the user's question.
+2. Search the indexed book.
+3. Retrieve relevant passages.
+4. Perform hybrid retrieval using semantic/vector search and keyword/full-text search.
+5. Rerank candidate passages.
+6. Select the most relevant source passages.
+7. Generate a concise answer based ONLY on the retrieved sources.
+8. Return the exact original source passage from the database.
+9. Show:
+
+   * Book name
+   * Printed page number
+   * PDF page number
+   * Chapter/section if available
+   * Exact original paragraph
+10. Provide a "View Original Page" feature that displays the scanned page image.
+
+The application should make it easy for a user to verify that the quotation actually exists in the source.
+
+---
+
+# 3. Critical Anti-Hallucination Requirement
+
+This is extremely important.
+
+The LLM must NEVER be treated as the source of the original quotation.
+
+Do NOT allow the LLM to freely generate or reconstruct quoted source text.
+
+The architecture should be:
+
+User Query
+→ Retrieval
+→ Reranking
+→ Source IDs
+→ LLM answer generation
+→ Backend retrieves ORIGINAL stored text using source IDs
+→ Frontend displays ORIGINAL database text
+
+The quotation displayed under "Original Source" must come directly from the database/OCR source text, not from the LLM's generated response.
+
+The LLM may summarize or explain retrieved content, but source quotations must come from stored source data.
+
+---
+
+# 4. Recommended Technology Stack
+
+## Frontend
+
+Use:
+
+* Next.js
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+* TanStack Query where useful
+
+The frontend should be clean, modern, responsive and professional.
+
+Do not over-design it.
+
+Primary UI:
+
+* Chat interface
+* User question input
+* Streaming AI answer if practical
+* Source/citation cards
+* Original paragraph display
+* Printed page number
+* PDF page number
+* "View Original Page" button
+* Page image viewer/modal
+
+---
+
+# 5. Backend
+
+Use:
+
+* Python
+* FastAPI
+* Pydantic
+* SQLAlchemy
+* Alembic
+
+Organize the backend professionally.
+
+Suggested structure:
+
+backend/
+app/
+api/
+core/
+models/
+schemas/
+services/
+retrieval/
+embeddings/
+reranking/
+generation/
+citation/
+workers/
+main.py
+
+Also create a separate ingestion pipeline.
+
+---
+
+# 6. Database
+
+Use:
+
+PostgreSQL + pgvector.
+
+Supabase will be used as the PostgreSQL hosting platform.
+
+Design a proper relational schema.
+
+At minimum consider:
+
+books
+pages
+sections
+paragraphs/chunks
+documents
+embeddings
+
+A source chunk should contain enough metadata to trace it back to the exact original page.
+
+For example:
+
+{
+"book_id": 1,
+"pdf_page_number": 263,
+"printed_page_number": 251,
+"section": "...",
+"paragraph_index": 4,
+"text": "...",
+"embedding": [...]
+}
+
+Use proper foreign keys and indexes.
+
+Enable pgvector.
+
+Do not store the entire PDF binary inside PostgreSQL.
+
+---
+
+# 7. Storage
+
+Use object storage for:
+
+* Original PDF
+* Page images
+* Potentially OCR artifacts
+
+For the MVP, Supabase Storage is acceptable.
+
+Recommended structure:
+
+books/
+fazail-e-amal/
+original.pdf
+pages/
+001.jpg
+002.jpg
+...
+1009.jpg
+
+The database should store references/URLs/paths to these objects.
+
+---
+
+# 8. OCR / Document Ingestion
+
+Create a robust ingestion pipeline.
+
+Pipeline:
+
+PDF
+→ page extraction
+→ high-resolution page image
+→ OCR
+→ text cleaning
+→ paragraph/section detection
+→ page mapping
+→ database insertion
+→ embeddings
+
+The ingestion pipeline should preserve page boundaries.
+
+Do NOT combine the entire PDF into one giant text document.
+
+Paragraph-level or semantically meaningful chunks should be created while retaining:
+
+* page number
+* paragraph number
+* section/chapter
+* source document
+* original image reference
+
+If OCR supports bounding boxes, preserve bounding-box information because it can later be used to highlight the source text on the original scanned page.
+
+---
+
+# 9. Printed Page Number Detection
+
+This is an important requirement.
+
+The application must distinguish:
+
+PDF page number
+
+from
+
+printed book page number.
+
+If printed page numbers are visible in the scan, create a mapping:
+
+pdf_page_number
+→ printed_page_number
+
+Do not assume they are identical.
+
+Create a mechanism for correcting the mapping manually if OCR fails.
+
+For example, provide an ingestion/configuration file such as:
+
+page_mapping.json
+
+or a database table that allows:
+
+PDF page 263 → printed page 251
+
+This mapping must be used by the citation system.
+
+---
+
+# 10. Chunking
+
+Do NOT blindly use arbitrary fixed-size chunks.
+
+Prefer document-aware chunking.
+
+Ideally:
+
+Book
+→ Chapter/Section
+→ Paragraph
+→ Sentence
+
+A paragraph should preferably remain intact.
+
+If a paragraph is too large, split it while retaining a parent/source relationship.
+
+Every chunk must maintain its source page relationship.
+
+---
+
+# 11. Retrieval
+
+Use hybrid retrieval.
+
+Do NOT rely only on vector similarity.
+
+Recommended:
+
+1. Vector similarity search using pgvector.
+2. PostgreSQL full-text/keyword search.
+3. Combine candidate results.
+4. Rerank candidates.
+5. Return top relevant passages.
+
+Example:
+
+Question
+→ vector search: top 20
+→ keyword search: top 20
+→ merge/deduplicate
+→ reranker
+→ top 3–5 passages
+
+The retrieval implementation should be modular so the embedding model or reranker can be replaced later.
+
+---
+
+# 12. Embeddings
+
+Use a strong multilingual embedding model/API suitable for:
+
+* Bangla
+* English
+* Arabic/Islamic terminology where relevant
+
+Keep embedding generation inside the ingestion pipeline.
+
+Do not regenerate embeddings every time a user asks a question.
+
+Store embeddings in pgvector.
+
+---
+
+# 13. Reranking
+
+Use a multilingual reranker where practical.
+
+The goal is:
+
+Vector/keyword search
+→ candidate passages
+→ reranker
+→ highly relevant source passages
+
+Keep the reranker service modular.
+
+If the chosen reranker is too expensive for the MVP, provide a simpler fallback while keeping the architecture ready for a production reranker.
+
+---
+
+# 14. LLM
+
+Use the API credentials I provide.
+
+The LLM should be used for:
+
+* Query understanding
+* Answer synthesis
+* Summarization
+* Explanation
+* Identifying relevant retrieved context
+
+The LLM must NOT invent source citations.
+
+Every source citation must correspond to a real source record returned by the retrieval system.
+
+If the retrieved evidence is insufficient, the assistant should say that the source material does not provide enough evidence rather than hallucinating an answer.
+
+---
+
+# 15. Citation Architecture
+
+Every source chunk should have a stable source ID.
+
+Example:
+
+chunk_8f72a
+
+The LLM can return source IDs, but the backend must validate them.
+
+Backend should:
+
+1. Receive source IDs.
+2. Verify they exist.
+3. Retrieve original stored text.
+4. Retrieve book/page metadata.
+5. Return verified source objects to frontend.
+
+Example response:
+
+{
+"answer": "...",
+
+"sources": [
+{
+"source_id": "chunk_8f72a",
+"book": "Fazail-e-Amal",
+"printed_page": 251,
+"pdf_page": 263,
+"section": "...",
+"original_text": "...",
+"page_image_url": "..."
+}
+]
+}
+
+The frontend should display `original_text` from this verified backend response.
+
+---
+
+# 16. Answer Format
+
+A typical response should look like:
+
+Answer:
+
+[Short AI-generated answer based on retrieved evidence]
+
+Sources:
+
+Fazail-e-Amal
+Printed Page: 251
+PDF Page: 263
+
+Original passage:
+
+[Exact original paragraph retrieved from the database]
+
+[View Original Page]
+
+If multiple passages are relevant, display multiple source cards.
+
+---
+
+# 17. Original Page Viewer
+
+Implement a page viewer.
+
+When the user clicks:
+
+"View Original Page"
+
+show the actual scanned page image.
+
+The viewer should display:
+
+* Book
+* Printed page number
+* PDF page number
+* Original scan
+
+If feasible, support zoom.
+
+Do not generate a fake reconstructed page.
+
+Always display the original scanned page.
+
+---
+
+# 18. API Design
+
+Create clean REST endpoints.
+
+Suggested endpoints:
+
+POST /api/v1/chat
+
+GET /api/v1/books
+
+GET /api/v1/books/{book_id}
+
+GET /api/v1/sources/{source_id}
+
+GET /api/v1/pages/{page_id}
+
+GET /api/v1/pages/{page_id}/image
+
+Health:
+
+GET /health
+
+Add OpenAPI documentation through FastAPI.
+
+---
+
+# 19. Environment Variables
+
+Never hardcode secrets.
+
+Use `.env`.
+
+Example:
+
+DATABASE_URL=
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+LLM_API_KEY=
+EMBEDDING_API_KEY=
+STORAGE_BUCKET=
+REDIS_URL=
+
+Use `.env.example`.
+
+Never commit `.env`.
+
+Add `.env` to `.gitignore`.
+
+---
+
+# 20. Security
+
+Implement basic production security:
+
+* CORS configuration
+* API rate limiting where practical
+* Input validation
+* Secure environment variables
+* No API keys exposed to frontend
+* No secrets committed to Git
+* SQL injection-safe ORM queries
+* File upload validation if uploads are supported
+
+The LLM API key must only exist on the backend.
+
+---
+
+# 21. Demo Requirements
+
+This is primarily a demo/MVP, so prioritize:
+
+1. Accurate source retrieval
+2. Exact paragraph display
+3. Printed page reference
+4. Original scanned page viewer
+5. Good Bangla question-answer experience
+6. Clean UI
+7. Reliable citations
+
+Do NOT waste time building unnecessary features such as:
+
+* social login
+* payment system
+* complex admin dashboard
+* multi-tenant architecture
+* advanced analytics
+
+unless they are required for the core system.
+
+---
+
+# 22. Deployment Target
+
+The application should be deployable using free/low-cost services for a demo.
+
+Suggested:
+
+Frontend:
+Vercel
+
+Backend:
+Render/Railway or another suitable free/low-cost service
+
+Database:
+Supabase PostgreSQL + pgvector
+
+Storage:
+Supabase Storage or Cloudflare R2
+
+LLM:
+My provided API key
+
+The application should work locally first and then be deployment-ready.
+
+---
+
+# 23. Observability / Debugging
+
+Add useful logging for:
+
+* query
+* retrieval latency
+* number of candidates
+* selected source IDs
+* LLM latency
+* errors
+
+Do NOT log API keys or sensitive credentials.
+
+For development, make retrieval results inspectable so I can debug why a particular passage was selected.
+
+---
+
+# 24. Evaluation
+
+Create a small evaluation dataset.
+
+For example:
+
+20–50 manually prepared questions with expected relevant pages/passages.
+
+Measure:
+
+* Retrieval accuracy
+* Correct page number
+* Correct paragraph
+* Citation correctness
+* Answer groundedness
+
+The goal is not just to make the chatbot "sound good".
+
+The goal is to make sure:
+
+Question → Correct source passage → Correct page reference
+
+is reliable.
+
+---
+
+# 25. Development Process
+
+Do not attempt to build everything blindly at once.
+
+Follow this order:
+
+Phase 1:
+Project setup + database schema
+
+Phase 2:
+PDF ingestion + OCR + page mapping
+
+Phase 3:
+Chunking + embeddings
+
+Phase 4:
+Vector + keyword retrieval
+
+Phase 5:
+Reranking
+
+Phase 6:
+LLM answer generation
+
+Phase 7:
+Citation verification
+
+Phase 8:
+Next.js chat UI
+
+Phase 9:
+Original page viewer
+
+Phase 10:
+Evaluation
+
+Phase 11:
+Deployment
+
+At the end of each phase, test the implementation before continuing.
+
+---
+
+# 26. Important Development Rule
+
+Before writing a large amount of code, inspect the provided project structure and source PDF.
+
+If something is ambiguous, make a reasonable engineering decision and document it.
+
+Do not replace a working component just for the sake of using another technology.
+
+Keep the system modular.
+
+The architecture should allow future support for multiple books.
+
+For example:
+
+Book A
+Book B
+Book C
+
+should all be indexable without changing the core RAG architecture.
+
+---
+
+# 27. Final Product Vision
+
+The final application should feel like:
+
+"Ask questions about the book, get a grounded answer, and immediately verify the exact original source."
+
+The core trust model is:
+
+AI Answer
++
+Exact Original Paragraph
++
+Printed Page Number
++
+Original Scanned Page
+
+The original source should always remain authoritative.
+
+Start by inspecting the project files and the provided PDF, then propose the exact implementation plan and begin Phase 1.

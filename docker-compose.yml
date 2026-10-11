@@ -1,0 +1,29 @@
+# Local development services. Production uses Supabase (PostgreSQL + pgvector + Storage).
+#   docker compose up -d db
+#   DATABASE_URL=postgresql://postgres:postgres@localhost:55432/hadith
+# (host port 55432 avoids clashing with a locally installed PostgreSQL; override with DB_PORT)
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hadith
+    ports:
+      - "${DB_PORT:-55432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d hadith"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    profiles: ["redis"]
+
+volumes:
+  pgdata:

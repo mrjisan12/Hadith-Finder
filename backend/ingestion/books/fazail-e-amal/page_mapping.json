@@ -1,0 +1,5 @@
+{
+  "_comment": "Manual PDF page -> printed page corrections. They override OCR/inference. 'pages': {\"<pdf_page>\": <printed number> | \"<label>\" | null}. 'ranges': [{\"pdf_start\": a, \"pdf_end\": b, \"printed_start\": n}]. After editing, run: python -m ingestion apply-mapping fazail-e-amal",
+  "pages": {},
+  "ranges": []
+}
